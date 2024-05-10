@@ -1,0 +1,18 @@
+---
+import HeaderButton from "./HeaderButton.astro";
+---
+
+<header class="py-8 px-4 mx-auto max-w-xl lg:py-16 lg:px-6">
+	<div class="mx-auto text-center mb-8 lg:mb-16">
+		<h2 class="mb-4 text-5xl tracking-tight font-extrabold text-white">Knoweats</h2>
+		<p class="font-light text-gray-500 sm:text-xl dark:text-gray-400">Todos nuestros platos disponibles</p>
+	</div>
+	<nav class="flex flex-row items-center justify-between w-full text-center">
+		<HeaderButton href="/home">Home</HeaderButton>
+		<HeaderButton href="/platos"
+			>Platos
+			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-burger"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 15h16a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"></path><path d="M12 4c3.783 0 6.953 2.133 7.786 5h-15.572c.833 -2.867 4.003 -5 7.786 -5z"></path><path d="M5 12h14"></path></svg>
+		</HeaderButton>
+		<HeaderButton href="/platos">About</HeaderButton>
+	</nav>
+</header>
