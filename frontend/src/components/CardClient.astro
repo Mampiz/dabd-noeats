@@ -1,0 +1,29 @@
+---
+// TypeScript interface for client data
+interface Props {
+	id: number;
+	email: string;
+	phone: string;
+	address: string;
+}
+
+// Destructuring props passed to the component
+const {id, email, phone, address} = Astro.props;
+---
+
+<!-- Component: Client Card -->
+<a href={`/client/${id}`} class="rounded-lg border shadow-md bg-gray-800 border-gray-700 hover:scale-105 hover:bg-gray-700 hover:border-gray-500 transition flex flex-col">
+	<picture class="flex justify-center p-4">
+		<img src="../burrito.png" alt="" />
+	</picture>
+	<header class="p-4 flex-grow">
+		<span class="text-xs font-semibold mr-2 px-2.5 py-0.5 rounded bg-green-500"> Contact </span>
+		<h2 class="my-2 text-2xl font-bold tracking-tight text-white">{email}</h2>
+		<p class="font-light text-gray-400">
+			{phone}
+		</p>
+		<p class="mb-4 font-light text-gray-400">
+			{address.length > 100 ? `${address.slice(0, 100)}...` : address}
+		</p>
+	</header>
+</a>

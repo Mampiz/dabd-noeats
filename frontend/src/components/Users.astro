@@ -1,0 +1,34 @@
+---
+// Importamos el tipo 'Component' de Astro para tipado correcto
+// En Users.astro
+import {type Cliente} from "../types/apiusers.ts";
+import CardClient from "./CardClient.astro";
+// Definimos la interfaz para un cliente individual
+
+// Función para obtener los clientes desde el backend
+async function fetchClientes(): Promise<Cliente[]> {
+	const response = await fetch("http://localhost:3000/clientes", {
+		method: "GET"
+	});
+
+	if (!response.ok) {
+		throw new Error("Failed to fetch");
+	}
+
+	return response.json();
+}
+
+// Ejecutamos la función y esperamos los datos
+let clientes: Cliente[] = [];
+try {
+	clientes = await fetchClientes();
+	console.log(clientes);
+} catch (error) {
+	console.error("Error fetching clients:", error);
+}
+---
+
+<!-- Componente de visualización de clientes -->
+<div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+	{clientes.map(cliente => <CardClient id={cliente.id} email={cliente.correu} phone={cliente.telefon} address={cliente.adreca} />)}
+</div>

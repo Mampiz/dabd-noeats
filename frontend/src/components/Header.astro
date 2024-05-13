@@ -1,18 +1,89 @@
 ---
-import HeaderButton from "./HeaderButton.astro";
+
 ---
 
-<header class="py-8 px-4 mx-auto max-w-xl lg:py-16 lg:px-6">
-	<div class="mx-auto text-center mb-8 lg:mb-16">
-		<h2 class="mb-4 text-5xl tracking-tight font-extrabold text-white">Knoweats</h2>
-		<p class="font-light text-gray-500 sm:text-xl dark:text-gray-400">Todos nuestros platos disponibles</p>
+<header class="pb-28">
+	<!-- lg+ -->
+	<div class="bg-[#1A6A5Eff] border-b border-gray-200">
+		<div class="px-4 mx-auto sm:px-6 lg:px-8">
+			<nav class="relative flex items-center justify-between h-16 lg:h-20">
+				<div class="hidden lg:flex lg:items-center lg:space-x-10">
+					<a href="../ " title="" class="text-base font-semibold text-white hover:text-yellow-400"> Inicio </a>
+
+					<a href="#" title="" class="text-base font-semibold text-white hover:text-yellow-400"> Plaros </a>
+
+					<a href="#" title="" class="text-base font-semibold text-white hover:text-yellow-400"> Precios </a>
+
+					<a href="#" title="" class="text-base font-semibold text-white hover:text-yellow-400"> About us </a>
+				</div>
+
+				<div class="lg:absolute lg:-translate-x-1/2 lg:inset-y-5 lg:left-1/2">
+					<div class="flex-shrink-0">
+						<a href="#" title="" class="flex">
+							<img class="w-auto h-10 sm:h-10 lg:h-10" src="https://imgs.search.brave.com/Ll2wIqLmn1W-7QImhadWUF7vxbabcp--F_SmejBnjKU/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9tZWRp/YS5saWNkbi5jb20v/ZG1zL2ltYWdlL0Q0/RDNEQVFFQVJNZGkw/bHd3d3cvaW1hZ2Ut/c2NhbGVfMTkxXzEx/MjgvMC8xNjk0Njkx/NTU1MzY5L2tub3dl/YXRzX2NvdmVyP2U9/MjE0NzQ4MzY0NyZ2/PWJldGEmdD05YnNy/Z1hZakxHVUtPQUtG/Y0U4NHhmOG1GbHlG/bnM2djFxLUxTTXJr/RDRz" alt="" />
+						</a>
+					</div>
+				</div>
+
+				<button type="button" class="flex items-center justify-center ml-auto text-white bg-black rounded-full w-9 h-9 lg:hidden">
+					<svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+					</svg>
+				</button>
+
+				<button type="button" class="inline-flex p-2 ml-5 text-black transition-all duration-200 rounded-md lg:hidden focus:bg-gray-100 hover:bg-gray-100">
+					<svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+					</svg>
+				</button>
+
+				<div class="hidden lg:flex lg:items-center lg:space-x-10">
+					<a href="#" title="" class="text-base font-semibold text-white hover:text-yellow-400"> Sign up </a>
+
+					<a href="#" title="" class="text-base font-semibold text-white hover:text-yellow-400"> Sign in </a>
+
+					<a href="#" title="" class="flex items-center justify-center w-10 h-10 text-[#1A6A5Eff] bg-white rounded-full">
+						<svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+						</svg>
+					</a>
+				</div>
+			</nav>
+		</div>
 	</div>
-	<nav class="flex flex-row items-center justify-between w-full text-center">
-		<HeaderButton href="/home">Home</HeaderButton>
-		<HeaderButton href="/platos"
-			>Platos
-			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-burger"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M4 15h16a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"></path><path d="M12 4c3.783 0 6.953 2.133 7.786 5h-15.572c.833 -2.867 4.003 -5 7.786 -5z"></path><path d="M5 12h14"></path></svg>
-		</HeaderButton>
-		<HeaderButton href="/platos">About</HeaderButton>
+
+	<!-- xs to lg -->
+	<nav class="py-4 bg-white lg:hidden">
+		<div class="px-4 mx-auto sm:px-6 lg:px-8">
+			<div class="flex items-center justify-between">
+				<p class="text-sm font-semibold tracking-widest text-gray-400 uppercase">Menu</p>
+
+				<button type="button" class="inline-flex p-2 text-black transition-all duration-200 rounded-md focus:bg-gray-100 hover:bg-gray-100">
+					<svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+					</svg>
+				</button>
+			</div>
+
+			<div class="mt-6">
+				<div class="flex flex-col space-y-2">
+					<a href="#" title="" class="py-2 text-base font-medium text-black transition-all duration-200 focus:text-blue-600"> Features </a>
+
+					<a href="#" title="" class="py-2 text-base font-medium text-black transition-all duration-200 focus:text-blue-600"> Solutions </a>
+
+					<a href="#" title="" class="py-2 text-base font-medium text-black transition-all duration-200 focus:text-blue-600"> Resources </a>
+
+					<a href="#" title="" class="py-2 text-base font-medium text-black transition-all duration-200 focus:text-blue-600"> Pricing </a>
+				</div>
+
+				<hr class="my-4 border-gray-200" />
+
+				<div class="flex flex-col space-y-2">
+					<a href="#" title="" class="py-2 text-base font-medium text-black transition-all duration-200 focus:text-blue-600"> Sign up </a>
+
+					<a href="#" title="" class="py-2 text-base font-medium text-black transition-all duration-200 focus:text-blue-600"> Sign in </a>
+				</div>
+			</div>
+		</div>
 	</nav>
 </header>

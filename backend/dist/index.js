@@ -45,6 +45,27 @@ app.get("/clientes", (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.status(500).send("Error interno del servidor");
     }
 }));
+app.get("/platos", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { rows } = yield pool.query("select * from practica.plat LIMIT 12;");
+        res.json(rows);
+    }
+    catch (error) {
+        console.error("Error al realizar la consulta", error);
+        res.status(500).send("Error interno del servidor");
+    }
+}));
+app.get("/platos/:nom", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const nom = req.params.nom; // Obtener el parámetro 'nom' de la URL
+        const { rows } = yield pool.query("select * from practica.plat WHERE nom = $1", [nom]);
+        res.json(rows);
+    }
+    catch (error) {
+        console.error("Error al realizar la consulta", error);
+        res.status(500).send("Error interno del servidor");
+    }
+}));
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
 });

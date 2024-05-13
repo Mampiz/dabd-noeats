@@ -1,110 +1,43 @@
-export type SpaceXAPi = {
-	docs: Doc[];
-	totalDocs: number;
-	offset: number;
-	limit: number;
-	totalPages: number;
-	page: number;
-	pagingCounter: number;
-	hasPrevPage: boolean;
-	hasNextPage: boolean;
-	prevPage: null;
-	nextPage: number;
-};
-
-export type Doc = {
-	fairings: Fairings | null;
-	links: Links;
-	static_fire_date_utc: Date | null;
-	static_fire_date_unix: number | null;
-	net: boolean;
-	window: number;
-	rocket: Rocket;
-	success: boolean;
-	failures: Failure[];
-	details: null | string;
-	crew: any[];
-	ships: string[];
-	capsules: string[];
-	payloads: string[];
-	launchpad: Launchpad;
-	flight_number: number;
-	name: string;
-	date_utc: Date;
-	date_unix: number;
-	date_local: Date;
-	date_precision: DatePrecision;
-	upcoming: boolean;
-	cores: Core[];
-	auto_update: boolean;
-	tbd: boolean;
-	launch_library_id: null;
-	id: string;
-};
-
-export type Core = {
-	core: string;
-	flight: number;
-	gridfins: boolean;
-	legs: boolean;
-	reused: boolean;
-	landing_attempt: boolean;
-	landing_success: null;
-	landing_type: null;
-	landpad: null;
-};
-
-export enum DatePrecision {
-	Hour = "hour"
+// Define an interface for each meal's details
+export interface Meal {
+	idMeal: string;
+	strMeal: string;
+	strDrinkAlternate: null | string;
+	strCategory: string;
+	strArea: string;
+	strInstructions: string;
+	strMealThumb: string;
+	strTags: null | string;
+	strYoutube: string;
+	strIngredient1: string;
+	strIngredient2: string;
+	// Include all other ingredients up to strIngredient20
+	strIngredient20?: string;
+	strMeasure1: string;
+	strMeasure2: string;
+	// Include all other measures up to strMeasure20
+	strMeasure20?: string;
+	strSource: null | string;
+	strImageSource: null | string;
+	strCreativeCommonsConfirmed: null | string;
+	dateModified: null | string;
 }
 
-export type Failure = {
-	time: number;
-	altitude: number | null;
-	reason: string;
-};
-
-export type Fairings = {
-	reused: boolean | null;
-	recovery_attempt: boolean | null;
-	recovered: boolean | null;
-	ships: any[];
-};
-
-export enum Launchpad {
-	The5E9E4501F509094Ba4566F84 = "5e9e4501f509094ba4566f84",
-	The5E9E4502F5090995De566F86 = "5e9e4502f5090995de566f86"
+// Define an interface for the entire response containing all meals
+export interface MealsResponse {
+	meals: Meal[];
 }
 
-export type Links = {
-	patch: Patch;
-	reddit: Reddit;
-	flickr: Flickr;
-	presskit: null | string;
-	webcast: string;
-	youtube_id: string;
-	article: string;
-	wikipedia: string;
-};
+// You can also define utility functions here to work with these types, like fetching data from the API, parsing, etc.
 
-export type Flickr = {
-	small: any[];
-	original: any[];
-};
+export interface User {
+	id: number;
+	telefon: string;
+	correu: string;
+	adreca: string;
+}
 
-export type Patch = {
-	small: string;
-	large: string;
-};
-
-export type Reddit = {
-	campaign: null;
-	launch: null | string;
-	media: null;
-	recovery: null;
-};
-
-export enum Rocket {
-	The5E9D0D95Eda69955F709D1Eb = "5e9d0d95eda69955f709d1eb",
-	The5E9D0D95Eda69973A809D1Ec = "5e9d0d95eda69973a809d1ec"
+// Define an interface for the entire response containing all meals
+export interface UsersResponse {
+	users: User[];
 }
