@@ -1,3 +1,4 @@
+import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
 import {Pool} from "pg";
@@ -5,7 +6,13 @@ import {Pool} from "pg";
 dotenv.config();
 
 const app = express();
-const port = 3000;
+const port = 3001;
+
+app.use(
+	cors({
+		origin: "http://localhost:3000" // Permite peticiones solo desde este origen
+	})
+);
 
 const pool = new Pool({
 	host: process.env.DB_HOST,

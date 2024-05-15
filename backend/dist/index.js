@@ -12,12 +12,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const express_1 = __importDefault(require("express"));
 const pg_1 = require("pg");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
-const port = 3000;
+const port = 3001;
+app.use((0, cors_1.default)({
+    origin: "http://localhost:3000" // Permite peticiones solo desde este origen
+}));
 const pool = new pg_1.Pool({
     host: process.env.DB_HOST,
     port: parseInt(process.env.DB_PORT || "5432"),
