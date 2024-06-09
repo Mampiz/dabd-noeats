@@ -41,7 +41,28 @@ app.get("/", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 }));
 app.get("/clientes", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { rows } = yield pool.query("SELECT * FROM practica.client ORDER BY id ASC LIMIT 3");
+        const { rows } = yield pool.query("SELECT * FROM practica.client ORDER BY id ASC LIMIT 12");
+        res.json(rows);
+    }
+    catch (error) {
+        console.error("Error al realizar la consulta", error);
+        res.status(500).send("Error interno del servidor");
+    }
+}));
+app.get("/clientes/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const id = req.params.id;
+        const { rows } = yield pool.query("SELECT * FROM practica.client WHERE id = $1", [id]);
+        res.json(rows);
+    }
+    catch (error) {
+        console.error("Error al realizar la consulta", error);
+        res.status(500).send("Error interno del servidor");
+    }
+}));
+app.get("/locales", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { rows } = yield pool.query("select * from practica.local LIMIT 12;");
         res.json(rows);
     }
     catch (error) {

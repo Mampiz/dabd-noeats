@@ -34,7 +34,40 @@ app.get("/", async (req, res) => {
 
 app.get("/clientes", async (req, res) => {
 	try {
-		const {rows} = await pool.query("SELECT * FROM practica.client ORDER BY id ASC LIMIT 3");
+		const {rows} = await pool.query("SELECT * FROM practica.client ORDER BY id ASC LIMIT 12");
+		res.json(rows);
+	} catch (error) {
+		console.error("Error al realizar la consulta", error);
+		res.status(500).send("Error interno del servidor");
+	}
+});
+
+app.get("/clientes/:id", async (req, res) => {
+	try {
+		const id = req.params.id
+		const {rows} = await pool.query("SELECT * FROM practica.client WHERE id = $1", [id]);
+		res.json(rows);
+	} catch (error) {
+		console.error("Error al realizar la consulta", error);
+		res.status(500).send("Error interno del servidor");
+	}
+});
+
+app.delete("/clientes/:id", async (req, res) => {
+	const { id } = req.params;
+	try {
+		await pool.query("DELETE FROM practica.clientes WHERE id = $1", [id]);
+		res.status(204).send(); // No Content
+	} catch (error) {
+		console.error("Error al eliminar el cliente", error);
+		res.status(500).send("Error interno del servidor");
+	}
+});
+
+
+app.get("/locales", async (req, res) => {
+	try {
+		const {rows} = await pool.query("select * from practica.local LIMIT 12;");
 		res.json(rows);
 	} catch (error) {
 		console.error("Error al realizar la consulta", error);
