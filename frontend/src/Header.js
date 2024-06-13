@@ -10,9 +10,6 @@ function Header() {
 				<div className="px-4 mx-auto sm:px-6 lg:px-8">
 					<nav className="relative flex items-center justify-between h-16 lg:h-20">
 						<div className="hidden lg:flex lg:items-center lg:space-x-10">
-							<Link to="/" className="text-base font-medium text-white">
-								Inicio
-							</Link>
 							<Link to="/platos" className="text-base font-medium text-white">
 								Platos
 							</Link>
@@ -21,6 +18,9 @@ function Header() {
 							</Link>
 							<Link to="/locales" className="text-base font-medium text-white">
 								Locales
+							</Link>
+							<Link to="/empleados" className="text-base font-medium text-white">
+								Empleados
 							</Link>
 						</div>
 						<div className="lg:absolute lg:-translate-x-1/2 lg:inset-y-5 lg:left-1/2">

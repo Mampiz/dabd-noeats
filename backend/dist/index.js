@@ -220,6 +220,38 @@ app.get("/locales/:ciutat/:pais", (req, res) => __awaiter(void 0, void 0, void 0
         res.status(500).send("Error interno del servidor");
     }
 }));
+app.get("/empleats", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { rows } = yield pool.query("SELECT * FROM practica.empleat ORDER BY nseguretatsocial ASC");
+        res.json(rows);
+    }
+    catch (error) {
+        console.error("Error al realizar la consulta", error);
+        res.status(500).send("Error interno del servidor");
+    }
+}));
+app.post("/empleats", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { nom, data_unio_empresa, ciutat, pais } = req.body;
+        const { rows } = yield pool.query("INSERT INTO practica.empleat (nom, data_unio_empresa, ciutat, pais) VALUES ($1, $2, $3, $4) RETURNING *", [nom, data_unio_empresa, ciutat, pais]);
+        res.status(201).json(rows[0]);
+    }
+    catch (error) {
+        console.error("Error al crear el empleado", error);
+        res.status(500).send("Error interno del servidor");
+    }
+}));
+app.delete("/empleats/:nseguretatsocial", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { nseguretatsocial } = req.params;
+    try {
+        yield pool.query("DELETE FROM practica.empleat WHERE nseguretatsocial = $1", [nseguretatsocial]);
+        res.status(204).send(); // No Content
+    }
+    catch (error) {
+        console.error("Error al eliminar el empleado", error);
+        res.status(500).send("Error interno del servidor");
+    }
+}));
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
 });

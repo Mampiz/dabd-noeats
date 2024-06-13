@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import {Route, BrowserRouter as Router, Routes} from "react-router-dom";
 import ClienteDetail from "./ClienteDetail"; // Importa el nuevo componente
 import Clientes from "./Clientes";
+import Empleados from "./Empleados"; // Importa el nuevo componente
 import Footer from "./Footer";
 import Header from "./Header";
 import Locales from "./Locales";
@@ -23,8 +24,9 @@ root.render(
 				<Route path="/platos" element={<MenuList />} />
 				<Route path="/platos/:nom" element={<PlatoDetail />} />
 				<Route path="/clientes" element={<Clientes />} />
-				<Route path="/clientes/:id" element={<ClienteDetail />} /> {/* Añade la nueva ruta */}
+				<Route path="/clientes/:id" element={<ClienteDetail />} />
 				<Route path="/locales" element={<Locales />} />
+				<Route path="/empleados" element={<Empleados />} /> {/* Añade la nueva ruta */}
 				<Route path="/clientes/:id" element={<UpdateCliente />} />
 				<Route path="/clientes/:ciutat/:pais" element={<UpdateLocal />} />
 			</Routes>

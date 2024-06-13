@@ -51,6 +51,7 @@ function ClienteDetail() {
 							<li key={index} className="border rounded-lg p-4 my-2">
 								<p className="text-lg font-semibold">Comanda ID: {comanda.id}</p>
 								<p className="text-sm text-gray-600">Hora: {comanda.hora}</p>
+								<p className="text-sm text-gray-600">Seguridad Social: {comanda.nseguretatsocial}</p>
 							</li>
 						))
 					)}
