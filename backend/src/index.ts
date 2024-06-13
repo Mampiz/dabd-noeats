@@ -131,6 +131,75 @@ app.delete("/clientes/:id", async (req, res) => {
 	}
 });
 
+app.put("/clientes/:id", async (req, res) => {
+    const id = parseInt(req.params.id);
+    const { telefon, correu, adreca } = req.body;
+
+    try {
+        const { rowCount } = await pool.query(
+            "UPDATE practica.client SET telefon = $1, correu = $2, adreca = $3 WHERE id = $4;",
+            [telefon, correu, adreca, id]
+        );
+
+        if (rowCount === 0) {
+            res.status(404).send("Cliente no encontrado");
+        } else {
+            res.sendStatus(204);
+        }
+    } catch (error) {
+        console.error("Error al realizar la actualización", error);
+        res.status(500).send("Error interno del servidor");
+    }
+});
+
+app.delete("/locales/:ciutat/:pais", async (req, res) => {
+    const { ciutat, pais } = req.params;
+    try {
+        const { rowCount } = await pool.query("DELETE FROM practica.local WHERE ciutat = $1 AND pais = $2", [ciutat, pais]);
+        if (rowCount === 0) {
+            res.status(404).send("Local no encontrado");
+        } else {
+            res.sendStatus(204); // No Content
+        }
+    } catch (error) {
+        console.error("Error al eliminar el local", error);
+        res.status(500).send("Error interno del servidor");
+    }
+});
+
+app.put("/locales/:ciutat/:pais", async (req, res) => {
+    const { ciutat, pais } = req.params;
+    const { newCiutat, newPais } = req.body;
+
+    try {
+        const { rowCount } = await pool.query(
+            "UPDATE practica.local SET ciutat = $1, pais = $2 WHERE ciutat = $3 AND pais = $4",
+            [newCiutat, newPais, ciutat, pais]
+        );
+
+        if (rowCount === 0) {
+            res.status(404).send("Local no encontrado");
+        } else {
+            res.sendStatus(204);
+        }
+    } catch (error) {
+        console.error("Error al realizar la actualización", error);
+        res.status(500).send("Error interno del servidor");
+    }
+});
+
+app.get("/locales/:ciutat/:pais", async (req, res) => {
+	try {
+		const { ciutat, pais } = req.params;
+		const {rows} = await pool.query("SELECT * FROM practica.local WHERE ciutat = $1 AND pais = $2", [ciutat,pais]);
+		res.json(rows);
+	} catch (error) {
+		console.error("Error al realizar la consulta", error);
+		res.status(500).send("Error interno del servidor");
+	}
+});
+
+
 app.listen(port, () => {
 	console.log(`Servidor corriendo en http://localhost:${port}`);
 });

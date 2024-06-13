@@ -6,6 +6,8 @@ import Footer from "./Footer";
 import Header from "./Header";
 import Locales from "./Locales"; 
 import MenuList from "./Menulist";
+import UpdateCliente from "./UpdateCliente";
+import UpdateLocal from "./UpdateLocal";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 
@@ -19,6 +21,8 @@ root.render(
 				<Route path="/platos" element={<MenuList />} />
 				<Route path="/clientes" element={<Clientes />} />
 				<Route path="/locales" element={<Locales />} />
+				<Route path="/clientes/:id" element={<UpdateCliente />} />
+				<Route path="/clientes/:ciutat/:pais" element={<UpdateLocal />} />
 			</Routes>
 			<Footer />
 		</Router>
