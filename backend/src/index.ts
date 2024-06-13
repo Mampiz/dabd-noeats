@@ -10,9 +10,12 @@ const port = 3001;
 
 app.use(
 	cors({
-		origin: "http://localhost:3000" // Permite peticiones solo desde este origen
+		origin: "http://localhost:3000"
 	})
 );
+
+// Middleware
+app.use(express.json());
 
 const pool = new Pool({
 	host: process.env.DB_HOST,
@@ -34,7 +37,7 @@ app.get("/", async (req, res) => {
 
 app.get("/clientes", async (req, res) => {
 	try {
-		const {rows} = await pool.query("SELECT * FROM practica.client ORDER BY id ASC LIMIT 12");
+		const {rows} = await pool.query("SELECT * FROM practica.client ORDER BY id DESC LIMIT 12");
 		res.json(rows);
 	} catch (error) {
 		console.error("Error al realizar la consulta", error);
@@ -42,9 +45,20 @@ app.get("/clientes", async (req, res) => {
 	}
 });
 
+app.post("/clientes", async (req, res) => {
+	try {
+		const {telefon, correu, adreca} = req.body;
+		const {rows} = await pool.query("INSERT INTO practica.client (telefon, correu, adreca) VALUES ($1, $2, $3) RETURNING *", [telefon, correu, adreca]);
+		res.status(201).json(rows[0]);
+	} catch (error) {
+		console.error("Error al crear el cliente", error);
+		res.status(500).send("Error interno del servidor");
+	}
+});
+
 app.get("/clientes/:id", async (req, res) => {
 	try {
-		const id = req.params.id
+		const id = req.params.id;
 		const {rows} = await pool.query("SELECT * FROM practica.client WHERE id = $1", [id]);
 		res.json(rows);
 	} catch (error) {
@@ -54,9 +68,9 @@ app.get("/clientes/:id", async (req, res) => {
 });
 
 app.delete("/clientes/:id", async (req, res) => {
-	const { id } = req.params;
+	const {id} = req.params;
 	try {
-		await pool.query("DELETE FROM practica.clientes WHERE id = $1", [id]);
+		await pool.query("DELETE FROM practica.client WHERE id = $1", [id]);
 		res.status(204).send(); // No Content
 	} catch (error) {
 		console.error("Error al eliminar el cliente", error);
@@ -64,13 +78,23 @@ app.delete("/clientes/:id", async (req, res) => {
 	}
 });
 
-
 app.get("/locales", async (req, res) => {
 	try {
 		const {rows} = await pool.query("select * from practica.local LIMIT 12;");
 		res.json(rows);
 	} catch (error) {
 		console.error("Error al realizar la consulta", error);
+		res.status(500).send("Error interno del servidor");
+	}
+});
+
+app.post("/locales", async (req, res) => {
+	try {
+		const {ciutat, pais} = req.body;
+		const {rows} = await pool.query("INSERT INTO practica.local (ciutat, pais) VALUES ($1, $2) RETURNING *", [ciutat, pais]);
+		res.status(201).json(rows[0]);
+	} catch (error) {
+		console.error("Error al crear el local", error);
 		res.status(500).send("Error interno del servidor");
 	}
 });
@@ -92,6 +116,17 @@ app.get("/platos/:nom", async (req, res) => {
 		res.json(rows);
 	} catch (error) {
 		console.error("Error al realizar la consulta", error);
+		res.status(500).send("Error interno del servidor");
+	}
+});
+
+app.delete("/clientes/:id", async (req, res) => {
+	const {id} = req.params;
+	try {
+		await pool.query("DELETE FROM practica.client WHERE id = $1", [id]);
+		res.status(204).send(); // No Content
+	} catch (error) {
+		console.error("Error al eliminar el cliente", error);
 		res.status(500).send("Error interno del servidor");
 	}
 });
