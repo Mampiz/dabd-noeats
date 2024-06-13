@@ -117,7 +117,7 @@ function Clientes() {
 
 			<ul className="grid lg:grid-cols-3 sm:grid-cols-2 gap-10 w-full">
 				{filteredClientes.map((cliente, index) => (
-					<li className="border rounded-lg hover:bg-gray-300 shadow-md" key={index}>
+					<li className="border rounded-lg hover:bg-gray-300 shadow-md" key={index} onClick={() => navigate(`/clientes/${cliente.id}`)}>
 						<div className="hover:scale-10 transition flex flex-col h-5/6 w-full p-4">
 							<header className="flex-grow">
 								<span className="text-xs font-semibold mr-2 px-2.5 py-0.5 rounded bg-green-500">Client</span>

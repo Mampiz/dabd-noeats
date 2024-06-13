@@ -59,8 +59,17 @@ app.post("/clientes", async (req, res) => {
 app.get("/clientes/:id", async (req, res) => {
 	try {
 		const id = req.params.id;
-		const {rows} = await pool.query("SELECT * FROM practica.client WHERE id = $1", [id]);
-		res.json(rows);
+		const clientQuery = await pool.query("SELECT * FROM practica.client WHERE id = $1", [id]);
+
+		if (clientQuery.rows.length === 0) {
+			return res.status(404).json({error: "Cliente no encontrado"});
+		}
+
+		const client = clientQuery.rows[0];
+		const comandasQuery = await pool.query("SELECT * FROM practica.comanda WHERE id_client = $1", [id]);
+		const comandas = comandasQuery.rows;
+
+		res.json({client, comandas});
 	} catch (error) {
 		console.error("Error al realizar la consulta", error);
 		res.status(500).send("Error interno del servidor");

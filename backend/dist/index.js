@@ -65,8 +65,14 @@ app.post("/clientes", (req, res) => __awaiter(void 0, void 0, void 0, function* 
 app.get("/clientes/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const id = req.params.id;
-        const { rows } = yield pool.query("SELECT * FROM practica.client WHERE id = $1", [id]);
-        res.json(rows);
+        const clientQuery = yield pool.query("SELECT * FROM practica.client WHERE id = $1", [id]);
+        if (clientQuery.rows.length === 0) {
+            return res.status(404).json({ error: "Cliente no encontrado" });
+        }
+        const client = clientQuery.rows[0];
+        const comandasQuery = yield pool.query("SELECT * FROM practica.comanda WHERE id_client = $1", [id]);
+        const comandas = comandasQuery.rows;
+        res.json({ client, comandas });
     }
     catch (error) {
         console.error("Error al realizar la consulta", error);
