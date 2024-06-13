@@ -4,8 +4,9 @@ import {Route, BrowserRouter as Router, Routes} from "react-router-dom";
 import Clientes from "./Clientes";
 import Footer from "./Footer";
 import Header from "./Header";
-import Locales from "./Locales"; 
+import Locales from "./Locales";
 import MenuList from "./Menulist";
+import PlatoDetail from "./PlatoDetail"; // Importa el nuevo componente
 import UpdateCliente from "./UpdateCliente";
 import UpdateLocal from "./UpdateLocal";
 import "./index.css";
@@ -19,6 +20,7 @@ root.render(
 			<Routes>
 				<Route path="/" element={<MenuList />} />
 				<Route path="/platos" element={<MenuList />} />
+				<Route path="/platos/:nom" element={<PlatoDetail />} /> {/* Añade la nueva ruta */}
 				<Route path="/clientes" element={<Clientes />} />
 				<Route path="/locales" element={<Locales />} />
 				<Route path="/clientes/:id" element={<UpdateCliente />} />

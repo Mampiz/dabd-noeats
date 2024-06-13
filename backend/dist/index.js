@@ -117,9 +117,25 @@ app.get("/platos", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 }));
 app.get("/platos/:nom", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const nom = req.params.nom; // Obtener el parámetro 'nom' de la URL
-        const { rows } = yield pool.query("select * from practica.plat WHERE nom = $1", [nom]);
-        res.json(rows);
+        const nom = req.params.nom;
+        const platQuery = yield pool.query("SELECT * FROM practica.plat WHERE nom = $1", [nom]);
+        if (platQuery.rows.length === 0) {
+            return res.status(404).json({ error: "Plato no encontrado" });
+        }
+        const plat = platQuery.rows[0];
+        res.json(plat);
+    }
+    catch (error) {
+        console.error("Error al realizar la consulta", error);
+        res.status(500).send("Error interno del servidor");
+    }
+}));
+app.get("/platos/:nom/descomptes", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const nom = req.params.nom;
+        const descompteQuery = yield pool.query("SELECT * FROM practica.descompte WHERE nom_plat = $1 LIMIT 10", [nom]);
+        const descomptes = descompteQuery.rows;
+        res.json(descomptes);
     }
     catch (error) {
         console.error("Error al realizar la consulta", error);
