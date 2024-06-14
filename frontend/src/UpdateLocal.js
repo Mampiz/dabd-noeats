@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 
 const UpdateLocal = () => {
-    const { id } = useParams();
+    const { ciutat, pais } = useParams();
     const navigate = useNavigate();
     const [local, setLocal] = useState({ ciutat: "", pais: "" });
     const [error, setError] = useState(null);
@@ -10,7 +10,7 @@ const UpdateLocal = () => {
     useEffect(() => {
         const fetchLocal = async () => {
             try {
-                const response = await fetch(`http://localhost:3001/locales/${id}`);
+                const response = await fetch(`http://localhost:3001/locales/${ciutat}/${pais}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -23,7 +23,7 @@ const UpdateLocal = () => {
         };
 
         fetchLocal();
-    }, [id]);
+    }, [ciutat, pais]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -33,7 +33,7 @@ const UpdateLocal = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:3001/locales/${id}`, {
+            const response = await fetch(`http://localhost:3001/locales/${ciutat}/${pais}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -83,7 +83,7 @@ const UpdateLocal = () => {
                 <div className="flex items-center justify-between">
                     <button
                         type="submit"
-                        className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                        className="bg-[#2F695Cff] hover:bg-[#285c4f] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     >
                         Actualizar
                     </button>
@@ -94,3 +94,4 @@ const UpdateLocal = () => {
 };
 
 export default UpdateLocal;
+
