@@ -84,7 +84,7 @@ function Locales() {
 			<div className="mb-4 w-full max-w-md">
 				<input type="text" placeholder="Buscar por país" value={searchCountry} onChange={handleSearchChange} className="w-full p-2 border rounded-md" />
 			</div>
-			<button onClick={() => setShowForm(!showForm)} className="mb-14 px-4 py-2 bg-blue-600 text-white rounded-md">
+			<button onClick={() => setShowForm(!showForm)} className="mb-14 px-4 py-2 bg-[#2F695Cff] text-white rounded-md">
 				Registrar Local
 			</button>
 
@@ -112,15 +112,15 @@ function Locales() {
 					<li className="border rounded-lg hover:bg-gray-300 shadow-md" key={index}>
 						<div className="flex flex-col h-5/6 w-full p-4">
 							<header className="flex-grow">
-								<span className="text-xs font-semibold mr-2 px-2.5 py-0.5 rounded bg-blue-500">Local</span>
+								<span className="text-xs font-semibold mr-2 px-2.5 py-0.5 rounded bg-green-500">Local</span>
 								<h2 className="my-2 text-3xl font-bold tracking-tight text-[#202202]">Ciudad: {local.ciutat}</h2>
 								<p className="font-light text-[#202202]">País: {local.pais}</p>
 							</header>
-							<div className="flex justify-between mt-4">
-								<button className="px-4 py-2 bg-yellow-500 text-white rounded-md mr-2" onClick={() => handleUpdate(local.ciutat, local.pais)}>
-									Update
-								</button>
-								<button className="px-4 py-2 bg-red-500 text-white rounded-md" onClick={() => handleDelete(local.ciutat, local.pais)}>
+							<div className="flex justify-end">
+								<button className="w-2/5 mt-6 inline-flex items-center px-4 py-2 bg-red-800 transition ease-in-out delay-75 hover:bg-red-900 text-white text-sm font-medium rounded-md hover:-translate-y-1 hover:scale-110" onClick={() => handleDelete(local.ciutat,local.pais)}>
+									<svg stroke="currentColor" viewBox="0 0 24 24" fill="none" className="h-5 w-5 mr-2" xmlns="http://www.w3.org/2000/svg">
+										<path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round"></path>
+									</svg>
 									Delete
 								</button>
 							</div>

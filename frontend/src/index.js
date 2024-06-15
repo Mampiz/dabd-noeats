@@ -30,7 +30,7 @@ root.render(
 				<Route path="/locales" element={<Locales />} />
 				<Route path="/empleados" element={<Empleados />} /> {/* Añade la nueva ruta */}
 				<Route path="/clientes/:id" element={<UpdateCliente />} />
-				<Route path="/clientes/:ciutat/:pais" element={<UpdateLocal />} />
+				<Route path="/locales/:ciutat/:pais" element={<UpdateLocal />} />
 			</Routes>
 			<Footer />
 			<ToastContainer />
