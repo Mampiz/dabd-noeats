@@ -248,7 +248,7 @@ app.get("/locales/:ciutat/:pais", async (req, res) => {
 
 app.get("/empleats", async (req, res) => {
 	try {
-		const {rows} = await pool.query("SELECT * FROM practica.empleat ORDER BY nseguretatsocial ASC");
+		const {rows} = await pool.query("SELECT * FROM practica.empleat ORDER BY nseguretatsocial DESC");
 		res.json(rows);
 	} catch (error) {
 		console.error("Error al realizar la consulta", error);
@@ -267,6 +267,24 @@ app.post("/empleats", async (req, res) => {
 	}
 });
 
+app.put("/empleats/:nseguretatsocial", async (req, res) => {
+	const {nseguretatsocial} = req.params;
+	const {nom, data_unio_empresa, ciutat, pais} = req.body;
+
+	try {
+		const {rowCount} = await pool.query("UPDATE practica.empleat SET nom = $1, data_unio_empresa = $2, ciutat = $3, pais = $4 WHERE nseguretatsocial = $5", [nom, data_unio_empresa, ciutat, pais, nseguretatsocial]);
+
+		if (rowCount === 0) {
+			res.status(404).send("Empleado no encontrado");
+		} else {
+			res.sendStatus(204);
+		}
+	} catch (error) {
+		console.error("Error al realizar la actualización", error);
+		res.status(500).send("Error interno del servidor");
+	}
+});
+
 app.delete("/empleats/:nseguretatsocial", async (req, res) => {
 	const {nseguretatsocial} = req.params;
 	try {
@@ -274,6 +292,20 @@ app.delete("/empleats/:nseguretatsocial", async (req, res) => {
 		res.status(204).send(); // No Content
 	} catch (error) {
 		console.error("Error al eliminar el empleado", error);
+		res.status(500).send("Error interno del servidor");
+	}
+});
+
+app.get("/empleats/:nseguretatsocial", async (req, res) => {
+	try {
+		const {nseguretatsocial} = req.params;
+		const {rows} = await pool.query("SELECT * FROM practica.empleat WHERE nseguretatsocial = $1", [nseguretatsocial]);
+		if (rows.length === 0) {
+			return res.status(404).json({error: "Empleado no encontrado"});
+		}
+		res.json(rows[0]);
+	} catch (error) {
+		console.error("Error al realizar la consulta", error);
 		res.status(500).send("Error interno del servidor");
 	}
 });

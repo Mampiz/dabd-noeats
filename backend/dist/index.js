@@ -247,7 +247,7 @@ app.get("/locales/:ciutat/:pais", (req, res) => __awaiter(void 0, void 0, void 0
 }));
 app.get("/empleats", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { rows } = yield pool.query("SELECT * FROM practica.empleat ORDER BY nseguretatsocial ASC");
+        const { rows } = yield pool.query("SELECT * FROM practica.empleat ORDER BY nseguretatsocial DESC");
         res.json(rows);
     }
     catch (error) {
@@ -266,6 +266,23 @@ app.post("/empleats", (req, res) => __awaiter(void 0, void 0, void 0, function* 
         res.status(500).send("Error interno del servidor");
     }
 }));
+app.put("/empleats/:nseguretatsocial", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { nseguretatsocial } = req.params;
+    const { nom, data_unio_empresa, ciutat, pais } = req.body;
+    try {
+        const { rowCount } = yield pool.query("UPDATE practica.empleat SET nom = $1, data_unio_empresa = $2, ciutat = $3, pais = $4 WHERE nseguretatsocial = $5", [nom, data_unio_empresa, ciutat, pais, nseguretatsocial]);
+        if (rowCount === 0) {
+            res.status(404).send("Empleado no encontrado");
+        }
+        else {
+            res.sendStatus(204);
+        }
+    }
+    catch (error) {
+        console.error("Error al realizar la actualización", error);
+        res.status(500).send("Error interno del servidor");
+    }
+}));
 app.delete("/empleats/:nseguretatsocial", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { nseguretatsocial } = req.params;
     try {
@@ -274,6 +291,20 @@ app.delete("/empleats/:nseguretatsocial", (req, res) => __awaiter(void 0, void 0
     }
     catch (error) {
         console.error("Error al eliminar el empleado", error);
+        res.status(500).send("Error interno del servidor");
+    }
+}));
+app.get("/empleats/:nseguretatsocial", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { nseguretatsocial } = req.params;
+        const { rows } = yield pool.query("SELECT * FROM practica.empleat WHERE nseguretatsocial = $1", [nseguretatsocial]);
+        if (rows.length === 0) {
+            return res.status(404).json({ error: "Empleado no encontrado" });
+        }
+        res.json(rows[0]);
+    }
+    catch (error) {
+        console.error("Error al realizar la consulta", error);
         res.status(500).send("Error interno del servidor");
     }
 }));
