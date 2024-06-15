@@ -1,11 +1,12 @@
 import React, {useEffect, useState} from "react";
-import {useParams} from "react-router-dom";
+import {useNavigate, useParams} from "react-router-dom";
+import {toast} from "react-toastify";
 
 function PlatoDetail() {
 	const {nom} = useParams();
 	const [plato, setPlato] = useState(null);
 	const [descomptes, setDescomptes] = useState([]);
-	const [error, setError] = useState(null);
+	const navigate = useNavigate();
 
 	useEffect(() => {
 		const fetchPlato = async () => {
@@ -18,7 +19,6 @@ function PlatoDetail() {
 				setPlato(data);
 			} catch (error) {
 				console.error("Could not fetch the data: ", error);
-				setError("Could not fetch the data. Please try again later.");
 			}
 		};
 
@@ -29,11 +29,10 @@ function PlatoDetail() {
 					throw new Error(`HTTP error! status: ${response.status}`);
 				}
 				const data = await response.json();
-				console.log("Descuentos recibidos:", data); // Añade esto
+				console.log("Descuentos recibidos:", data);
 				setDescomptes(data);
 			} catch (error) {
 				console.error("Could not fetch the data: ", error);
-				setError("Could not fetch the data. Please try again later.");
 			}
 		};
 
@@ -41,9 +40,20 @@ function PlatoDetail() {
 		fetchDescomptes();
 	}, [nom]);
 
-	if (error) {
-		return <div>{error}</div>;
-	}
+	const handleDelete = async () => {
+		try {
+			const response = await fetch(`http://localhost:3001/platos/${nom}`, {
+				method: "DELETE"
+			});
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+			navigate("/platos");
+		} catch (error) {
+			console.error("Could not delete the plato: ", error);
+			toast.error("No se puede borrar el plato, elimine los descuentos antes");
+		}
+	};
 
 	if (!plato) {
 		return <div>Loading...</div>;
@@ -58,6 +68,9 @@ function PlatoDetail() {
 				<h1 className="text-3xl font-bold tracking-tight text-[#202202]">{plato.nom}</h1>
 				<p className="font-light text-[#202202]">{plato.descripcio}</p>
 				<p className="pt-5 text-2xl font-extrabold text-[#202202]">{plato.preu} €</p>
+				<button onClick={handleDelete} className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md">
+					Eliminar Plato
+				</button>
 				<h2 className="text-xl font-bold mt-4">Descuentos</h2>
 				<ul className="w-full">
 					{descomptes.length === 0 ? (

@@ -3,6 +3,8 @@ import {Link} from "react-router-dom";
 
 function MenuList() {
 	const [items, setItems] = useState([]);
+	const [showForm, setShowForm] = useState(false);
+	const [newPlato, setNewPlato] = useState({nom: "", descripcio: "", preu: ""});
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -22,8 +24,61 @@ function MenuList() {
 		fetchData();
 	}, []);
 
+	const handleInputChange = e => {
+		const {name, value} = e.target;
+		setNewPlato({...newPlato, [name]: value});
+	};
+
+	const handleCreatePlato = async () => {
+		try {
+			const response = await fetch("http://localhost:3001/platos", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(newPlato)
+			});
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+			const createdPlato = await response.json();
+			console.log(createdPlato);
+			setItems([...items, createdPlato]);
+			setShowForm(false);
+		} catch (error) {
+			console.error("Could not create the plato: ", error);
+		}
+	};
+
 	return (
-		<div className="flex justify-center px-32">
+		<div className="flex flex-col items-center px-32">
+			<button onClick={() => setShowForm(!showForm)} className="mb-14 px-4 py-2 bg-[#2F695Cff] text-white rounded-md">
+				Añadir Plato
+			</button>
+
+			{showForm && (
+				<div className="mb-14 p-4 border rounded-md w-full max-w-md bg-white shadow-md">
+					<h2 className="text-xl font-bold mb-4">Nuevo Plato</h2>
+					<form>
+						<div className="mb-4">
+							<label className="block text-gray-700">Nombre:</label>
+							<input type="text" name="nom" value={newPlato.nom} onChange={handleInputChange} className="mt-1 p-2 w-full border rounded-md" />
+						</div>
+						<div className="mb-4">
+							<label className="block text-gray-700">Descripción:</label>
+							<textarea name="descripcio" value={newPlato.descripcio} onChange={handleInputChange} className="mt-1 p-2 w-full border rounded-md"></textarea>
+						</div>
+						<div className="mb-4">
+							<label className="block text-gray-700">Precio:</label>
+							<input type="number" name="preu" value={newPlato.preu} onChange={handleInputChange} className="mt-1 p-2 w-full border rounded-md" />
+						</div>
+						<button type="button" onClick={handleCreatePlato} className="px-4 py-2 bg-green-600 text-white rounded-md">
+							Crear
+						</button>
+					</form>
+				</div>
+			)}
+
 			<ul className="grid lg:grid-cols-3 sm:grid-cols-2 gap-10">
 				{items.map((item, index) => (
 					<li className="border rounded-lg hover:bg-gray-300 shadow-md" key={index}>

@@ -110,10 +110,35 @@ app.post("/locales", async (req, res) => {
 
 app.get("/platos", async (req, res) => {
 	try {
-		const {rows} = await pool.query("select * from practica.plat LIMIT 12;");
+		const {rows} = await pool.query("SELECT * FROM practica.plat ORDER BY nom DESC LIMIT 12");
 		res.json(rows);
 	} catch (error) {
 		console.error("Error al realizar la consulta", error);
+		res.status(500).send("Error interno del servidor");
+	}
+});
+
+app.post("/platos", async (req, res) => {
+	try {
+		const {nom, descripcio, preu} = req.body;
+		const {rows} = await pool.query("INSERT INTO practica.plat (nom, descripcio, preu) VALUES ($1, $2, $3) RETURNING *", [nom, descripcio, preu]);
+		res.status(201).json(rows[0]);
+	} catch (error) {
+		console.error("Error al crear el plato", error);
+		res.status(500).send("Error interno del servidor");
+	}
+});
+
+app.delete("/platos/:nom", async (req, res) => {
+	const {nom} = req.params;
+	try {
+		const result = await pool.query("DELETE FROM practica.plat WHERE nom = $1 RETURNING *", [nom]);
+		if (result.rows.length === 0) {
+			return res.status(404).json({error: "Plato no encontrado"});
+		}
+		res.status(200).json(result.rows[0]);
+	} catch (error) {
+		console.error("Error al eliminar el plato", error);
 		res.status(500).send("Error interno del servidor");
 	}
 });

@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import {Route, BrowserRouter as Router, Routes} from "react-router-dom";
+import {ToastContainer} from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import ClienteDetail from "./ClienteDetail"; // Importa el nuevo componente
 import Clientes from "./Clientes";
 import Empleados from "./Empleados"; // Importa el nuevo componente
@@ -31,6 +33,7 @@ root.render(
 				<Route path="/clientes/:ciutat/:pais" element={<UpdateLocal />} />
 			</Routes>
 			<Footer />
+			<ToastContainer />
 		</Router>
 	</React.StrictMode>
 );
