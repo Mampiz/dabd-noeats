@@ -72,7 +72,7 @@ function ClienteDetail() {
 		} catch (error) {
 			console.error("Could not delete the client: ", error);
 			setError("Could not delete the client. Please try again later.");
-			toast.error("Could not delete the client. Please try again later.");
+			toast.error("No puedes eliminar este cliente ya que tiene comandas realizadas");
 		}
 	};
 

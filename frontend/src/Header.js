@@ -22,6 +22,9 @@ function Header() {
 							<Link to="/empleados" className="text-base font-medium text-white">
 								Empleados
 							</Link>
+							<Link to="/comandas" className="text-base font-medium text-white">
+								Comandas
+							</Link>
 						</div>
 						<div className="lg:absolute lg:-translate-x-1/2 lg:inset-y-5 lg:left-1/2">
 							<div className="flex-shrink-0">

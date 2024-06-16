@@ -5,6 +5,7 @@ import {ToastContainer} from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ClienteDetail from "./ClienteDetail"; // Importa el nuevo componente
 import Clientes from "./Clientes";
+import ComandasList from "./ComandasList";
 import EmpleadoDetail from "./EmpleadoDetail";
 import Empleados from "./Empleados"; // Importa el nuevo componente
 import Footer from "./Footer";
@@ -33,6 +34,7 @@ root.render(
 				<Route path="/empleats/:nseguretatsocial" element={<EmpleadoDetail />} />
 				<Route path="/clientes/:id" element={<UpdateCliente />} />
 				<Route path="/locales/:ciutat/:pais" element={<UpdateLocal />} />
+				<Route path="/comandas" element={<ComandasList />} /> {/* Añade la nueva ruta */}
 			</Routes>
 			<Footer />
 			<ToastContainer />
