@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {toast} from "react-toastify";
 
 function Empleados() {
 	const [empleados, setEmpleados] = useState([]);
@@ -48,8 +49,11 @@ function Empleados() {
 			setEmpleados([...empleados, createdEmpleado]);
 			setFilteredEmpleados([...empleados, createdEmpleado]);
 			setShowForm(false);
+			toast.success("Empleado registrado con éxito");
+			navigate("/empleados");
 		} catch (error) {
 			console.error("Could not create the empleado: ", error);
+			toast.error("Error al registrar empleado");
 		}
 	};
 
