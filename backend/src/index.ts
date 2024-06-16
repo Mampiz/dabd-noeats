@@ -37,7 +37,7 @@ app.get("/", async (req, res) => {
 
 app.get("/clientes", async (req, res) => {
 	try {
-		const {rows} = await pool.query("SELECT * FROM practica.client ORDER BY id DESC LIMIT 12");
+		const {rows} = await pool.query("SELECT * FROM practica.client ORDER BY id DESC LIMIT 100");
 		res.json(rows);
 	} catch (error) {
 		console.error("Error al realizar la consulta", error);
@@ -89,7 +89,7 @@ app.delete("/clientes/:id", async (req, res) => {
 
 app.get("/locales", async (req, res) => {
 	try {
-		const {rows} = await pool.query("select * from practica.local LIMIT 12;");
+		const {rows} = await pool.query("select * from practica.local LIMIT 100;");
 		res.json(rows);
 	} catch (error) {
 		console.error("Error al realizar la consulta", error);
@@ -110,7 +110,7 @@ app.post("/locales", async (req, res) => {
 
 app.get("/platos", async (req, res) => {
 	try {
-		const {rows} = await pool.query("SELECT * FROM practica.plat ORDER BY nom DESC LIMIT 12");
+		const {rows} = await pool.query("SELECT * FROM practica.plat ORDER BY nom ASC LIMIT 100");
 		res.json(rows);
 	} catch (error) {
 		console.error("Error al realizar la consulta", error);
@@ -163,7 +163,7 @@ app.get("/platos/:nom", async (req, res) => {
 app.get("/platos/:nom/descomptes", async (req, res) => {
 	try {
 		const nom = req.params.nom;
-		const descompteQuery = await pool.query("SELECT * FROM practica.descompte WHERE nom_plat = $1 LIMIT 10", [nom]);
+		const descompteQuery = await pool.query("SELECT * FROM practica.descompte WHERE nom_plat = $1 LIMIT 100", [nom]);
 
 		const descomptes = descompteQuery.rows;
 		res.json(descomptes);
@@ -304,6 +304,43 @@ app.get("/empleats/:nseguretatsocial", async (req, res) => {
 			return res.status(404).json({error: "Empleado no encontrado"});
 		}
 		res.json(rows[0]);
+	} catch (error) {
+		console.error("Error al realizar la consulta", error);
+		res.status(500).send("Error interno del servidor");
+	}
+});
+
+app.get("/comandas", async (req, res) => {
+	const {fechaInicio, fechaFin, nseguretatsocial, id_client} = req.query;
+
+	let query = "SELECT * FROM practica.comanda WHERE 1=1";
+	const queryParams = [];
+
+	if (fechaInicio) {
+		queryParams.push(fechaInicio);
+		query += ` AND hora >= $${queryParams.length}`;
+	}
+
+	if (fechaFin) {
+		queryParams.push(fechaFin);
+		query += ` AND hora <= $${queryParams.length}`;
+	}
+
+	if (nseguretatsocial) {
+		queryParams.push(nseguretatsocial);
+		query += ` AND nseguretatsocial = $${queryParams.length}`;
+	}
+
+	if (id_client) {
+		queryParams.push(id_client);
+		query += ` AND id_client = $${queryParams.length}`;
+	}
+
+	query += " ORDER BY hora DESC";
+
+	try {
+		const {rows} = await pool.query(query, queryParams);
+		res.json(rows);
 	} catch (error) {
 		console.error("Error al realizar la consulta", error);
 		res.status(500).send("Error interno del servidor");
