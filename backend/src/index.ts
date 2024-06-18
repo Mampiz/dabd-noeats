@@ -89,7 +89,7 @@ app.delete("/clientes/:id", async (req, res) => {
 
 app.get("/locales", async (req, res) => {
 	try {
-		const {rows} = await pool.query("select * from practica.local LIMIT 100;");
+		const {rows} = await pool.query("select * from practica.local ORDER BY ciutat ASC;");
 		res.json(rows);
 	} catch (error) {
 		console.error("Error al realizar la consulta", error);
@@ -169,6 +169,31 @@ app.get("/platos/:nom/descomptes", async (req, res) => {
 		res.json(descomptes);
 	} catch (error) {
 		console.error("Error al realizar la consulta", error);
+		res.status(500).send("Error interno del servidor");
+	}
+});
+
+app.delete("/descomptes/:nom", async (req, res) => {
+	const {nom} = req.params;
+	try {
+		const result = await pool.query("DELETE FROM practica.descompte WHERE nom = $1 RETURNING *", [nom]);
+		if (result.rows.length === 0) {
+			return res.status(404).json({error: "Descuento no encontrado"});
+		}
+		res.status(200).json(result.rows[0]);
+	} catch (error) {
+		console.error("Error al eliminar el descuento", error);
+		res.status(500).send("Error interno del servidor");
+	}
+});
+
+app.post("/descomptes", async (req, res) => {
+	const {nom, data_inici, data_final, percentatge, nom_plat} = req.body;
+	try {
+		const {rows} = await pool.query("INSERT INTO practica.descompte (nom, data_inici, data_final, percentatge, nom_plat) VALUES ($1, $2, $3, $4, $5) RETURNING *", [nom, data_inici, data_final, percentatge, nom_plat]);
+		res.status(201).json(rows[0]);
+	} catch (error) {
+		console.error("Error al crear el descuento", error);
 		res.status(500).send("Error interno del servidor");
 	}
 });
@@ -289,7 +314,7 @@ app.delete("/empleats/:nseguretatsocial", async (req, res) => {
 	const {nseguretatsocial} = req.params;
 	try {
 		await pool.query("DELETE FROM practica.empleat WHERE nseguretatsocial = $1", [nseguretatsocial]);
-		res.status(204).send(); // No Content
+		res.status(204).send(); 
 	} catch (error) {
 		console.error("Error al eliminar el empleado", error);
 		res.status(500).send("Error interno del servidor");
@@ -309,6 +334,19 @@ app.get("/empleats/:nseguretatsocial", async (req, res) => {
 		res.status(500).send("Error interno del servidor");
 	}
 });
+
+
+app.get("/empleats/:nseguretatsocial/comandas", async (req, res) => {
+	const { nseguretatsocial } = req.params;
+	try {
+		const { rows } = await pool.query("SELECT * FROM practica.comanda WHERE nseguretatsocial = $1", [nseguretatsocial]);
+		res.json(rows);
+	} catch (error) {
+		console.error("Error al realizar la consulta", error);
+		res.status(500).send("Error interno del servidor");
+	}
+});
+
 
 app.get("/comandas", async (req, res) => {
 	const {fechaInicio, fechaFin, nseguretatsocial, id_client} = req.query;

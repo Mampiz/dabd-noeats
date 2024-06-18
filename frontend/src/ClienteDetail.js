@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from "react";
+import Modal from "react-modal";
 import {useNavigate, useParams} from "react-router-dom";
 import {toast} from "react-toastify";
+
+Modal.setAppElement("#root");
 
 function ClienteDetail() {
 	const {id} = useParams();
@@ -9,6 +12,7 @@ function ClienteDetail() {
 	const [error, setError] = useState(null);
 	const [isEditing, setIsEditing] = useState(false);
 	const [updatedClient, setUpdatedClient] = useState({telefon: "", correu: "", adreca: ""});
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -59,6 +63,10 @@ function ClienteDetail() {
 		}
 	};
 
+	const confirmDelete = () => {
+		setIsModalOpen(true);
+	};
+
 	const handleDelete = async () => {
 		try {
 			const response = await fetch(`http://localhost:3001/clientes/${id}`, {
@@ -74,6 +82,7 @@ function ClienteDetail() {
 			setError("Could not delete the client. Please try again later.");
 			toast.error("No puedes eliminar este cliente ya que tiene comandas realizadas");
 		}
+		setIsModalOpen(false);
 	};
 
 	if (!cliente) {
@@ -116,7 +125,7 @@ function ClienteDetail() {
 						<button onClick={() => setIsEditing(true)} className="mt-4 px-4 py-2 bg-[#2F695Cff] text-white rounded-md">
 							Actualizar Cliente
 						</button>
-						<button onClick={handleDelete} className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md">
+						<button onClick={confirmDelete} className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md">
 							Eliminar Cliente
 						</button>
 					</>
@@ -137,6 +146,19 @@ function ClienteDetail() {
 					)}
 				</ul>
 			</div>
+
+			<Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} contentLabel="Confirmar Eliminación" className="bg-white p-6 w-full max-w-md mx-auto mt-20 rounded-md shadow-lg" overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+				<h2 className="text-2xl font-bold mb-4">Confirmar Eliminación</h2>
+				<p>¿Estás seguro de que quieres eliminar este cliente?</p>
+				<div className="flex justify-end mt-4">
+					<button onClick={() => setIsModalOpen(false)} className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2">
+						Cancelar
+					</button>
+					<button onClick={handleDelete} className="px-4 py-2 bg-red-600 text-white rounded-md">
+						Eliminar
+					</button>
+				</div>
+			</Modal>
 		</div>
 	);
 }

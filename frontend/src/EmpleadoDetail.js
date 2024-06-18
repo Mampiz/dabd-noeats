@@ -1,13 +1,18 @@
 import React, {useEffect, useState} from "react";
+import Modal from "react-modal";
 import {useNavigate, useParams} from "react-router-dom";
 import {toast} from "react-toastify";
+
+Modal.setAppElement("#root");
 
 function EmpleadoDetail() {
 	const {nseguretatsocial} = useParams();
 	const [empleado, setEmpleado] = useState(null);
+	const [comandas, setComandas] = useState([]);
 	const [error, setError] = useState(null);
 	const [isEditing, setIsEditing] = useState(false);
 	const [updatedEmpleado, setUpdatedEmpleado] = useState({nom: "", data_unio_empresa: "", ciutat: "", pais: ""});
+	const [isModalOpen, setIsModalOpen] = useState(false);
 	const navigate = useNavigate();
 
 	useEffect(() => {
@@ -27,7 +32,23 @@ function EmpleadoDetail() {
 			}
 		};
 
+		const fetchComandas = async () => {
+			try {
+				const response = await fetch(`http://localhost:3001/empleats/${nseguretatsocial}/comandas`);
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
+				}
+				const data = await response.json();
+				setComandas(data);
+			} catch (error) {
+				console.error("Could not fetch the comandas: ", error);
+				setError("Could not fetch the comandas. Please try again later.");
+				toast.error("Could not fetch the comandas. Please try again later.");
+			}
+		};
+
 		fetchEmpleado();
+		fetchComandas();
 	}, [nseguretatsocial]);
 
 	const handleInputChange = e => {
@@ -57,6 +78,10 @@ function EmpleadoDetail() {
 		}
 	};
 
+	const confirmDelete = () => {
+		setIsModalOpen(true);
+	};
+
 	const handleDelete = async () => {
 		try {
 			const response = await fetch(`http://localhost:3001/empleats/${nseguretatsocial}`, {
@@ -70,13 +95,10 @@ function EmpleadoDetail() {
 		} catch (error) {
 			console.error("Could not delete the empleado: ", error);
 			setError("Could not delete the empleado. Please try again later.");
-			toast.error("Could not delete the empleado. Please try again later.");
+			toast.error("No puedes eliminar a este empleado ya que este tiene comandas realizadas");
 		}
+		setIsModalOpen(false);
 	};
-
-	if (error) {
-		return <div>{error}</div>;
-	}
 
 	if (!empleado) {
 		return <div>Loading...</div>;
@@ -123,12 +145,40 @@ function EmpleadoDetail() {
 						<button onClick={() => setIsEditing(true)} className="mt-4 px-4 py-2 bg-[#2F695Cff] text-white rounded-md">
 							Actualizar Empleado
 						</button>
-						<button onClick={handleDelete} className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md">
+						<button onClick={confirmDelete} className="mt-4 px-4 py-2 bg-red-600 text-white rounded-md">
 							Eliminar Empleado
 						</button>
 					</>
 				)}
+
+				<h2 className="text-xl font-bold mt-4">Comandas</h2>
+				<ul className="w-full">
+					{comandas.length === 0 ? (
+						<p>No hay comandas disponibles para este empleado.</p>
+					) : (
+						comandas.map((comanda, index) => (
+							<li key={index} className="border rounded-lg p-4 my-2">
+								<p className="text-lg font-semibold">Comanda ID: {comanda.id}</p>
+								<p className="text-sm text-gray-600">Hora: {new Date(comanda.hora).toLocaleString()}</p>
+								<p className="text-sm text-gray-600">Cliente ID: {comanda.id_client}</p>
+							</li>
+						))
+					)}
+				</ul>
 			</div>
+
+			<Modal isOpen={isModalOpen} onRequestClose={() => setIsModalOpen(false)} contentLabel="Confirmar Eliminación" className="bg-white p-6 w-full max-w-md mx-auto mt-20 rounded-md shadow-lg" overlayClassName="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+				<h2 className="text-2xl font-bold mb-4">Confirmar Eliminación</h2>
+				<p>¿Estás seguro de que quieres eliminar este empleado?</p>
+				<div className="flex justify-end mt-4">
+					<button onClick={() => setIsModalOpen(false)} className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2">
+						Cancelar
+					</button>
+					<button onClick={handleDelete} className="px-4 py-2 bg-red-600 text-white rounded-md">
+						Eliminar
+					</button>
+				</div>
+			</Modal>
 		</div>
 	);
 }

@@ -43,10 +43,10 @@ const LoginForm = () => {
 								<h1 className="text-2xl font-bold">Iniciar Sesión</h1>
 							</div>
 							<div className="my-3">
-								<input className="px-4 w-full border-2 py-2 rounded-md text-sm outline-none" type="email" name="Email" placeholder="Correo" value={correu} onChange={e => setCorreu(e.target.value)} />
+								<input className="px-4 w-full border-2 py-2 rounded-md text-sm outline-none" type="email" name="email" placeholder="Correo" value={correu} onChange={e => setCorreu(e.target.value)} />
 							</div>
 							<div className="mt-5">
-								<input className="px-4 w-full border-2 py-2 rounded-md text-sm outline-none" type="text" name="Contraseña" placeholder="Teléfono" value={telefon} onChange={e => setTelefon(e.target.value)} />
+								<input className="px-4 w-full border-2 py-2 rounded-md text-sm outline-none" type="password" name="password" placeholder="Contraseña" value={telefon} onChange={e => setTelefon(e.target.value)} />
 							</div>
 							<div>
 								<button className="mt-4 mb-3 w-full bg-[#2F695Cff] hover:bg-green-600 text-white py-2 rounded-md transition duration-100" type="submit">

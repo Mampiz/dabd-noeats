@@ -92,7 +92,7 @@ app.delete("/clientes/:id", (req, res) => __awaiter(void 0, void 0, void 0, func
 }));
 app.get("/locales", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { rows } = yield pool.query("select * from practica.local LIMIT 100;");
+        const { rows } = yield pool.query("select * from practica.local ORDER BY ciutat ASC;");
         res.json(rows);
     }
     catch (error) {
@@ -170,6 +170,31 @@ app.get("/platos/:nom/descomptes", (req, res) => __awaiter(void 0, void 0, void 
     }
     catch (error) {
         console.error("Error al realizar la consulta", error);
+        res.status(500).send("Error interno del servidor");
+    }
+}));
+app.delete("/descomptes/:nom", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { nom } = req.params;
+    try {
+        const result = yield pool.query("DELETE FROM practica.descompte WHERE nom = $1 RETURNING *", [nom]);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: "Descuento no encontrado" });
+        }
+        res.status(200).json(result.rows[0]);
+    }
+    catch (error) {
+        console.error("Error al eliminar el descuento", error);
+        res.status(500).send("Error interno del servidor");
+    }
+}));
+app.post("/descomptes", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { nom, data_inici, data_final, percentatge, nom_plat } = req.body;
+    try {
+        const { rows } = yield pool.query("INSERT INTO practica.descompte (nom, data_inici, data_final, percentatge, nom_plat) VALUES ($1, $2, $3, $4, $5) RETURNING *", [nom, data_inici, data_final, percentatge, nom_plat]);
+        res.status(201).json(rows[0]);
+    }
+    catch (error) {
+        console.error("Error al crear el descuento", error);
         res.status(500).send("Error interno del servidor");
     }
 }));
@@ -287,7 +312,7 @@ app.delete("/empleats/:nseguretatsocial", (req, res) => __awaiter(void 0, void 0
     const { nseguretatsocial } = req.params;
     try {
         yield pool.query("DELETE FROM practica.empleat WHERE nseguretatsocial = $1", [nseguretatsocial]);
-        res.status(204).send(); // No Content
+        res.status(204).send();
     }
     catch (error) {
         console.error("Error al eliminar el empleado", error);
@@ -302,6 +327,17 @@ app.get("/empleats/:nseguretatsocial", (req, res) => __awaiter(void 0, void 0, v
             return res.status(404).json({ error: "Empleado no encontrado" });
         }
         res.json(rows[0]);
+    }
+    catch (error) {
+        console.error("Error al realizar la consulta", error);
+        res.status(500).send("Error interno del servidor");
+    }
+}));
+app.get("/empleats/:nseguretatsocial/comandas", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { nseguretatsocial } = req.params;
+    try {
+        const { rows } = yield pool.query("SELECT * FROM practica.comanda WHERE nseguretatsocial = $1", [nseguretatsocial]);
+        res.json(rows);
     }
     catch (error) {
         console.error("Error al realizar la consulta", error);
