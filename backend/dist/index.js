@@ -338,6 +338,21 @@ app.get("/comandas", (req, res) => __awaiter(void 0, void 0, void 0, function* (
         res.status(500).send("Error interno del servidor");
     }
 }));
+app.post("/login", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { correu, telefon } = req.body;
+    try {
+        const clientQuery = yield pool.query("SELECT * FROM practica.client WHERE correu = $1 AND telefon = $2", [correu, telefon]);
+        if (clientQuery.rows.length === 0) {
+            return res.status(401).json({ error: "Credenciales inválidas" });
+        }
+        const client = clientQuery.rows[0];
+        res.json({ message: "Inicio de sesión exitoso", clientId: client.id });
+    }
+    catch (error) {
+        console.error("Error al iniciar sesión", error);
+        res.status(500).send("Error interno del servidor");
+    }
+}));
 app.listen(port, () => {
     console.log(`Servidor corriendo en http://localhost:${port}`);
 });
